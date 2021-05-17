@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/AmadoJunior/NodeBlockChain/issues"
   },
-  "homepage": "https://github.com/AmadoJunior/NodeBlockChain#readme"
+  "homepage": "https://github.com/AmadoJunior/NodeBlockChain#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
