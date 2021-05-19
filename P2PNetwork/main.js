@@ -9,6 +9,7 @@ const {calculateHash, isBlockValid, isLongestChain} = require("./Functions");
 //Blockchain - Series of Validated Blocks
 let Blockchain = [];
 let clientSockets = [];
+let childProcesses = [];
 
 //TCP Methods
 const onClientConnection = (socket) => {
@@ -47,6 +48,7 @@ const writeBlock = (data) => {
     console.log(numChild);
     for(let i = 0; i < numChild; i++){
         let subProcess = cp.fork(`${__dirname}/miningProcess.js`, {detached: true});
+        childProcesses.push(subProcess);
         subProcess.send(JSON.stringify({oldBlock: Blockchain[Blockchain.length-1], data: parseInt(data)}));
         subProcess.on("message", (message) => {
             let {newBlock, processId} = JSON.parse(message);
@@ -54,6 +56,10 @@ const writeBlock = (data) => {
                 let newBlockchain = [...Blockchain, newBlock];
                 if(isLongestChain(newBlockchain, Blockchain)){
                     Blockchain = newBlockchain;
+                    for(let child of childProcesses){
+                        child.kill("SIGINT");
+                    }
+                    childProcesses = [];
                     console.log(processId);
                     console.log(JSON.stringify(Blockchain, null, 2));
                 }

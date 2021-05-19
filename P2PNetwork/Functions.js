@@ -10,7 +10,7 @@ const {Block} = require("./Structs");
         return sha256.update(record).digest("hex");
     }
     //Generate a block using previous block hash and Proof of Work
-    const generateBlock = (oldBlock, data) => {
+    const generateBlock = (oldBlock, data, processId) => {
         //Creating newBlock
         let newBlock = new Block();
         newBlock.index = oldBlock.index + 1;
@@ -30,10 +30,10 @@ const {Block} = require("./Structs");
             newBlock.nonce = hex;
             currentHash = calculateHash(newBlock);
             if(!isHashValid(currentHash, newBlock.difficulty)){
-                //console.log(`Invalid Hash: ${currentHash}`);
+                console.log(`Invalid Hash PID(${processId}): ${currentHash}`);
                 sleep(500);
             } else {
-                //console.log(`Valid Hash: ${currentHash} \n Work Done! \n`);
+                console.log(`Valid Hash PID(${processId}): ${currentHash} \n Work Done! \n`);
                 newBlock.hash = currentHash;
                 break;
             }
