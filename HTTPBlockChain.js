@@ -2,7 +2,7 @@ const express = require("express");
 const crypto = require("crypto");
 const app = express();
 
-//Structures
+//Structures ===========================================================
     //Difficulty Setting
     const Difficulty = 1;
     //Block Structure
@@ -24,7 +24,7 @@ const app = express();
     //Blockchain
     let Blockchain = [];
 
-//Methods
+//Methods ===========================================================
     //Check Validity of newBlock
     const isBlockValid = (newBlock, oldBlock) => {
         if(oldBlock.index+1 !== newBlock.index){
@@ -119,10 +119,10 @@ const app = express();
 
 
 
-//Midleware
+//Midleware ===========================================================
 app.use(express.json());
 
-//Route Handlers
+//Route Handlers ===========================================================
 const handleGetBlockchain = (req, res) => {
     console.log("GET Request Recieved")
     res.status(200).json(Blockchain);
@@ -140,12 +140,14 @@ const handleWriteBlock = (req, res) => {
     res.status(200).json(newBlock);
 }
 
+//Main ===========================================================
+
 startUp();
 
 app.get("/", handleGetBlockchain);
 
 app.post("/", handleWriteBlock);
 
-//Server
+//Server ===========================================================
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Started Server on Port: ${PORT}`));
